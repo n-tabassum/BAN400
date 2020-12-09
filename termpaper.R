@@ -1,3 +1,9 @@
+
+## TERM PAPER 
+## BAN400 
+## FALL 2020 
+
+################################################################################
 #     LIBRARIES
 ################################################################################
 
@@ -46,7 +52,7 @@ traffic <- ApiData("https://data.ssb.no/api/v0/en/table/12579/",
 df <- data.frame(data$`12579: Road traffic volumes, by region, vehicle type, contents and year`) %>%
   na.omit(df) %>%
   map_df(., gsub, pattern = "\\([^()]*\\)", replacement = "") %>%
-  select(., c(1,2,5)) %>%
+  select(., c(1,5)) %>%
   rename(., "value: traffic volume (million km)" = value) %>%
   as.data.frame(.)-> df
 
@@ -57,35 +63,64 @@ pollution <- c(as.numeric((emission[[1]][[6]])*1000))
 traffic <- c((traffic[[1]][[5]])*1000000)
 traffic <- as.numeric(traffic)
 
+# Average pollution per vehicle  
+ave <- pollution/traffic
 
 ################################################################################
-#                  CALCULATOR
+#     SHINY: The initial calculator 
 ################################################################################
-# Emission calculation function:
-emission.calculation <- function(x,y){
-  y <- readline(prompt = "Enter alteration of carpark: ")
-  x <- readline(prompt = "Enter region: ")
-  r <- filter(df,region == x)[,1]
-  v <-  as.numeric(filter(df, region == x)[,3])
-  a <- (((pollution/traffic)*v)*(as.numeric(y)))
-  options(digits = 2)
-  if (y == 0){
-    return(cat("The average vehicle in",r, "emits", ((pollution/traffic)*v),
-               "tons of greenhouse gases per year."))
-  } else if (y > 0){
-    return(cat("An addition of",y,"vehicles in", r, "will increase the road traffic
-               emissions by",a,"tons of greenhouse gases per year. This equals a",
-               ((a/pollution)*100),"% 
-               increase in total emissons from road traffic in Norway."))
-  } else if (y < 0) {
-    return(cat("A reduction of",(as.numeric(y)*(-1)),"vehicles in", r,
-               "will decrease the road traffic emissions 
-                 by",a*(-1),"tons of greenhouse gases per year. This equals a",
-               ((-1)*(a/pollution)*100),"%
-                 decrease in total emissons from road traffic in Norway."))
-  }
+
+library(shiny)
+library(shinydashboard)
+library(shinythemes)
+
+#########################################
+# User interface 
+#########################################
+
+ui <- fluidPage(
+  
+  theme = shinytheme("flatly"),
+  h1("Emission calculator"),
+  numericInput("carpark", "Enter alteration",
+               value = 0, max = 10000, min = -10000),
+  selectInput("region", "Select region", df$region),
+  
+  textOutput("table"),
+  mainPanel(
+    tableOutput("result")
+  )
+)
+
+########################################
+# Server
+########################################
+
+server <- function(input, output){
+  inputdata <- reactive({
+    data <- data.frame( 
+      carpark = as.numeric(input$carpark),
+      region = input$region)
+    data
+  }) 
+  output$result <- renderTable({
+    data = inputdata()
+    resultTable = data.frame(
+      Result = "Change in emission for selected region is",
+      co2 = ave*(as.numeric((filter(df,region == input$region)[,2])))*input$carpark
+    )
+    resultTable
+  })
+  
+  output$table <- renderText({
+    print("*tons of greenhouse gases per year")
+  })
+  
 }
 
-# Try it: 
-emission.calculation()
+####################################
+# Shiny app
+####################################
+
+shinyApp(ui, server)
 
