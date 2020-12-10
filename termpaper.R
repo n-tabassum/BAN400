@@ -14,7 +14,8 @@ library(tidyr)
 library(magrittr)
 library(purrr)
 library(tidyverse)
-
+library(shiny)
+library(shinythemes)
 
 ################################################################################
 #                     DATA LOADING 
@@ -46,7 +47,6 @@ traffic <- ApiData("https://data.ssb.no/api/v0/en/table/12579/",
 #                   PRE-PROCESSING 
 ################################################################################
 
-
 # Selecting relevant list, removing parantheses information in region column
 # and NAs
 df <- data.frame(data$`12579: Road traffic volumes, by region, vehicle type, contents and year`) %>%
@@ -56,25 +56,13 @@ df <- data.frame(data$`12579: Road traffic volumes, by region, vehicle type, con
   rename(., "value: traffic volume (million km)" = value) %>%
   as.data.frame(.)-> df
 
-
 # Making a vector for average pollution per vehicle based on emission data and 
 # traffic volume for the whole country.
-pollution <- c(as.numeric((emission[[1]][[6]])*1000))
-traffic <- c((traffic[[1]][[5]])*1000000)
-traffic <- as.numeric(traffic)
-
-# Average pollution per vehicle  
-ave <- pollution/traffic
+ave <- (as.numeric((emission[[1]][[6]])*1000))/(as.numeric((traffic[[1]][[5]])*1000000))
 
 ################################################################################
 #     SHINY: The initial calculator 
 ################################################################################
-
-library(shiny)
-library(shinydashboard)
-library(shinythemes)
-
-#########################################
 # User interface 
 #########################################
 
@@ -123,4 +111,3 @@ server <- function(input, output){
 ####################################
 
 shinyApp(ui, server)
-
