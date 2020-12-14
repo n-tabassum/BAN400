@@ -74,15 +74,17 @@ install.packages("fhidata")
 library(fhidata)
 library(ggplot2)
 
+
 #Extracting data from package
-new_municips <- as.data.frame(norway_municip_merging)
-map_data <- as.data.frame(norway_map_counties)
+current <- as.data.frame(norway_locations_long_current)
+map_data <- as.data.frame(norway_map_municips)
+new_mapdata <- merge(map_data, current, by = "location_code", no.dups = FALSE)
 
-
-#Basic map divided into counties - old
-map1 <- ggplot(mapping = aes(x = long, y = lat, group = group, fill = location_code)) + 
-  geom_polygon(data = map_data, color = "black") + theme_void() + 
-  coord_quickmap() 
-map1
+#Static map divided my municipalities
+static_map <- ggplot(mapping = aes(x = long, y = lat, group = group)) + 
+  geom_polygon(data = new, color = "black") +
+  theme_void() + 
+  coord_quickmap()
+static_map
 
 #######################################################################
