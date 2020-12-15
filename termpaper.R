@@ -80,29 +80,41 @@ ave <- (as.numeric((emission[[1]][[6]])*1000))/
 #########################################
 ui <- fluidPage(
   
-  theme = shinytheme("flatly"),
-  h1("Emission calculator"),
-  sidebarPanel(
-    numericInput("carpark", "Enter alteration",
+  tabsetPanel(
+    tabPanel("Calculator", fluidRow(
+      theme = shinytheme("flatly"),
+      h1("Emission calculator"),
+      sidebarPanel(
+        numericInput("carpark", "Enter alteration",
                  value = 0),
-    selectInput("region", "Select region", df$region),
-    
-    tableOutput("result"),
-    textOutput("table")),
+        selectInput("region", "Select region", df$region),
+        tableOutput("result"),
+        textOutput("table")),
+      mainPanel(
+        textOutput("explanation"),
+        plotOutput("plot")
+  ))),
   
-  mainPanel(
-    textOutput("explanation"),
-    
-    
-    plotOutput("plot")
-  )
-)
+  tabPanel("Map", fluidRow(
+    theme = shinytheme("flatly"),
+    h1("Map"),
+    leafletOutput("map")
+    )),
+  
+  tabPanel("About", fluidRow(
+    theme = shinytheme("flatly"),
+    h1("About the termpaper")
+  ))
+  
+           
+))
 
 ########################################
 # Server
 ########################################
 
 server <- function(input, output){
+  #calculations
   inputdata <- reactive({
     req(input$carpark)
     data <- data.frame( 
@@ -168,6 +180,16 @@ server <- function(input, output){
       theme_classic()
     
   }) 
+  
+  # Map
+  points <- eventReactive(input$region, {
+    cbind(rnorm(40) * 2 + 13, rnorm(40) + 48)}, ignoreNULL = FALSE)
+  
+  output$map <- renderLeaflet({
+    leaflet() %>%
+      addProviderTiles(providers$Stamen.TonerLite,
+                       options = providerTileOptions(noWrap = TRUE))
+  })
 }
 
 
