@@ -23,9 +23,6 @@ library(RColorBrewer)
 library(leaflet)
 library(plotly)
 library(maptools)
-library(knitr)
-library(rmarkdown)
-
 
 ################################################################################
 #                     DATA LOADING 
@@ -196,13 +193,8 @@ server <- function(input, output){
   })
 }
 
-
-
-
 ####################################
 # Shiny app
 ####################################
 
 shinyApp(ui, server)
-
-

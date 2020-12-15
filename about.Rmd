@@ -3,7 +3,7 @@ title: "About"
 output: html_document
 ---
 #### **About** 
-The emission calculator is essentially a simple and easy system to calculate the increase or decrease in greenhouse gas emissions in Norway based on the change in number of vehicles. We have used data from [Statistics Norway](https://www.ssb.no/) using APIs defined to collect the data from the latest year. The data required used for the calculation include traffic volumes in each municipality (defined as ‘region’) in Norway, total greenhouse emissions caused by road traffic, and traffic and emission data for the whole country. A function was created to calculate the change in emission that requires user input.
+The emission calculator is essentially a simple system to calculate the increase or decrease in greenhouse gas emissions in Norway based on the change in number of vehicles. We have used data from [Statistics Norway](https://www.ssb.no/) using APIs defined to collect the data from the latest year. The data required used for the calculation include traffic volumes in each municipality (defined as ‘region’) in Norway, total greenhouse emissions caused by road traffic, and traffic and emission data for the whole country. A function was created to calculate the change in emission that requires user input.
 The basic calculator that was initially formed in RStudio is now on Shiny app. Hence, we have an easier user interface and the output results are no longer displayed in the console. 
 
 --------
@@ -28,7 +28,7 @@ We also attempted to include an interactive map for selecting region. However, t
 -----------
 
 ##### **Our goal:**
-Before starting the project we made a draft of what we wanted to achieve. 
+Before starting the project we made a draft of what we wanted to achieve. Even though we were not able to reach our goal in time for the deadline, the usage of the calculator has improved a lot from the initial project in BAN420.  
 
 ![Drafted goal](https://raw.githubusercontent.com/n-tabassum/BAN400/main/goal.png)
 
