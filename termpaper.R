@@ -74,7 +74,7 @@ ave <- (as.numeric((emission[[1]][[6]])*1000))/
   (as.numeric(filter(df, region == "The whole country")[,3])*1000000)
                  
 ################################################################################
-#     SHINY: The initial calculator 
+#     SHINY: The emission calculator 
 ################################################################################
 # User interface 
 #########################################
@@ -84,7 +84,7 @@ ui <- fluidPage(
   h1("Emission calculator"),
   sidebarPanel(
     numericInput("carpark", "Enter alteration",
-                 value = 0, max = 10000, min = -10000),
+                 value = 0),
     selectInput("region", "Select region", df$region),
     
     tableOutput("result"),
@@ -104,6 +104,7 @@ ui <- fluidPage(
 
 server <- function(input, output){
   inputdata <- reactive({
+    req(input$carpark)
     data <- data.frame( 
       carpark = as.numeric(input$carpark),
       region = input$region)
@@ -124,27 +125,29 @@ server <- function(input, output){
   
   #explanation text
   output$explanation <- renderText({
+    req(input$carpark)
     init <- ave*(as.numeric(filter(df, region == input$region)[,3])*1000000)
     co2 <- ave*(as.numeric(filter(df, region == input$region)[,2])*input$carpark)
     new.co2 <- (init + co2)
     percent <- ((new.co2-init)/init)*100
     percent <- round(percent, digits = 2)
     
-    if (input$carpark > 0)
+    if (input$carpark > 0) 
       print(paste("An addition of", input$carpark,
                   "vehicles in" , input$region, ", will increase emissions by",
                   percent, "% per year."))
     
-    else if (input$carpark < 0) 
+    else if (input$carpark < 0)
       print(paste("A reduction of", (-1)*input$carpark,
                   "vehicles in", input$region, ", will decrease emissions by",
                   percent*(-1), "% per year."))
     else if (input$carpark == 0)
-      print(paste(""))
+      print(paste(NULL))
   })
   
   #plot
   output$plot <- renderPlot({
+    req(input$carpark)
     co2 <- ave*(as.numeric(filter(df, region == input$region)[,2])*input$carpark)
     init <- ave*(as.numeric(filter(df, region == input$region)[,3])*1000000)
     new.co2 <- (init + co2)
@@ -166,6 +169,7 @@ server <- function(input, output){
     
   }) 
 }
+
 
 
 
