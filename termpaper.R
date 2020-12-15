@@ -18,6 +18,11 @@ library(shiny)
 library(shinythemes)
 library(ggplot2)
 library(ggthemes)
+library(fhidata)
+library(RColorBrewer)
+library(leaflet)
+library(plotly)
+library(maptools)
 
 
 ################################################################################
