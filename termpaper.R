@@ -23,6 +23,8 @@ library(RColorBrewer)
 library(leaflet)
 library(plotly)
 library(maptools)
+library(knitr)
+library(rmarkdown)
 
 
 ################################################################################
@@ -106,12 +108,9 @@ ui <- fluidPage(
     leafletOutput("map")
     )),
   
-  tabPanel("About", fluidRow(
-    theme = shinytheme("flatly"),
-    h1("About the termpaper")
-  ))
-  
-           
+  tabPanel(("About"), 
+            div(includeMarkdown("about.Rmd"), 
+                align="justify"))
 ))
 
 ########################################

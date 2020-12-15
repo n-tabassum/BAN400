@@ -1,0 +1,41 @@
+---
+title: "About"
+output: html_document
+---
+#### **About** 
+The emission calculator is essentially a simple and easy system to calculate the increase or decrease in greenhouse gas emissions in Norway based on the change in number of vehicles. We have used data from [Statistics Norway](https://www.ssb.no/) using APIs defined to collect the data from the latest year. The data required used for the calculation include traffic volumes in each municipality (defined as ‘region’) in Norway, total greenhouse emissions caused by road traffic, and traffic and emission data for the whole country. A function was created to calculate the change in emission that requires user input.
+The basic calculator that was initially formed in RStudio is now on Shiny app. Hence, we have an easier user interface and the output results are no longer displayed in the console. 
+
+--------
+
+##### **How It Works:**
+
+1. Running the R code will launch a Shiny app window asking for input.
+2. As the user, you must enter a number in the “Enter alteration” option, which will be used as the increase/decrease in the number of vehicles.
+3. Then, you need to select a region by using the drop down option under “Select region”. You may select a specific region or the ‘The whole country’ to calculate average emission change.
+4. You will see text output in percentage of increase or decrease based on change in number of vehicles.
+5. You will also see a visual representation of this in a bar plot where the increase in emission will be shown in red compared to the current emission in the region.
+
+--------
+
+##### **Scope for improvement:**
+
+There are numerous variables, input and outputs, that can still be added to this project. 
+The bar plot visualizes the increase or decrease in the level of emission based on the calculations. Note that negative input data does not display in correct coloring before reaching a certain value. This feature has not been fixed due to time. The problem arises because the visuals are built of two plots using ggplot2. The color changing plot is layered behind the blue bar. We have tried a number of if-statements without achieving the desired result. 
+
+We also attempted to include an interactive map for selecting region. However, the current map does not serve that purpose. Yet, since the package “leaflet” contains map data for the entire world, this map can be used for any country if the corresponding data is included, making this calculator usable outside Norway.
+
+-----------
+
+##### **Our goal:**
+Before starting the project we made a draft of what we wanted to achieve. 
+
+![Drafted goal](https://raw.githubusercontent.com/n-tabassum/BAN400/main/goal.png)
+
+--------
+
+##### **Reference:**
+[Statistics Norway](https://www.ssb.no/)
+
+
+
